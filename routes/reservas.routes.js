@@ -1,20 +1,21 @@
-const express = require("express");
+// routes/reservas.routes.js
+const express = require('express');
 const router = express.Router();
-const reservasController = require("../controllers/reservas.controller");
+const auth = require('../middlewares/auth');
+const ctrl = require('../controllers/reservas.controller');
 
-// Ruta para crear una reserva
-router.post("/", reservasController.crearReserva);
+router.use(auth.verificarToken);
 
-// Ruta para obtener todas las reservas
-router.get("/", reservasController.obtenerReservas);
+router.post('/', auth.soloRecepcionista, ctrl.crearReserva);
+router.get('/', ctrl.obtenerReservas);
+router.get('/:id', ctrl.obtenerReservaPorId);
+router.put('/:id', auth.soloSupervisor, ctrl.actualizarReserva);
+router.delete('/:id', auth.soloSupervisor, ctrl.eliminarReserva);
 
-// Ruta para obtener una reserva por ID
-router.get("/:id", reservasController.obtenerReservaPorId);
+router.post('/checkout/:id', auth.soloRecepcionista, ctrl.realizarCheckOut);
+router.get('/facturas-huesped/:documento', ctrl.consultarFacturasHuesped);
 
-// Ruta para actualizar una reserva
-router.put("/:id", reservasController.actualizarReserva);
-
-// Ruta para eliminar (cancelar) una reserva
-router.delete("/:id", reservasController.eliminarReserva);
+router.get('/habitaciones/disponibles', auth.soloRecepcionista, ctrl.verificarDisponibilidad);
+router.get('/huesped/:documento', auth.soloRecepcionista, ctrl.buscarHuesped);
 
 module.exports = router;

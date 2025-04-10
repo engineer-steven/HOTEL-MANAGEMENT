@@ -1,23 +1,15 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const db = require('./models'); // Contiene Habitacion, Reserva, etc.
+
 const reservasRoutes = require('./routes/reservas.routes');
+const supervisorRoutes = require('./routes/supervisor.routes');
+const recepcionistaRoutes = require('./routes/recepcionista.routes'); // Importa las rutas del recepcionista
 
 app.use(express.json());
-app.use('/reservas', reservasRoutes);
-
-const PORT = process.env.PORT || 3000;
-
-db.sequelize.sync({ force: process.env.NODE_ENV === 'test' ? true : false })
-  .then(() => {
-    console.log('✅ Base de datos sincronizada');
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-    });
-  })
-  .catch(error => {
-    console.error('❌ Error al sincronizar la base de datos:', error);
-  });
+app.use('/api/reservas', reservasRoutes);
+app.use('/api/supervisor', supervisorRoutes);
+app.use('/api/recepcionista', recepcionistaRoutes); // Monta las rutas del recepcionista
 
 module.exports = app;
