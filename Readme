@@ -8,7 +8,7 @@ Sistema de gestión hotelera construido con **Node.js**, **Express**, **Sequeliz
 - Pruebas unitarias automatizadas con **Jest*
 -- Clonar el repositorio
 
-```bash
+```clonar repositorio
 git clone https://github.com/engineer-steven/HOTEL-MANAGEMENT.git
 cd HOTEL-MANAGEMENT
 
