@@ -1,0 +1,24 @@
+#  HOTEL MANAGEMENT SYSTEM
+
+Sistema de gestión hotelera construido con **Node.js**, **Express**, **Sequelize**, y **MySQL**, que incluye:
+
+- Autenticación por roles (`Supervisor` y `Recepcionista`)
+- Gestión de reservas, habitaciones, huéspedes, facturas y pagos
+- Interfaz en consola (CLI)
+- Pruebas unitarias automatizadas con **Jest*
+-- Clonar el repositorio
+
+```bash
+git clone https://github.com/engineer-steven/HOTEL-MANAGEMENT.git
+cd HOTEL-MANAGEMENT
+
+---
+Durante el desarrollo del sistema, se logró implementar correctamente la funcionalidad de la interfaz de línea de comandos (CLI), cumpliendo con los requisitos establecidos en el backlog para esta etapa del backend.
+El archivo principal de la CLI permite iniciar sesión con control de roles (supervisor y recepcionista), y se logró una navegación funcional por menús dinámicos según el perfil del usuario.
+Se validó que la interacción desde consola esté operativa, permitiendo acciones como crear reservas, buscar huéspedes por documento, verificar disponibilidad de habitaciones y registrar recepcionistas
+(solo por el supervisor). La estructura modular de la carpeta cli/ facilita la ampliación de funcionalidades futuras.
+Este avance representa el cumplimiento parcial del MVP definido, específicamente en la integración y operación por consola. A pesar de que aún se presentan retos en la ejecución de pruebas automatizadas,
+la funcionalidad CLI demuestra que el núcleo del sistema de reservas opera como se esperaba, lo cual es clave para el cumplimiento del objetivo del Sprint actual.
+
+
+
