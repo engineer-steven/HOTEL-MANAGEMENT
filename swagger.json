@@ -1,0 +1,443 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Hotel Management",
+    "description": "Documentación de la API del sistema de gestión hotelera"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "tags": [
+    {
+      "name": "Autenticación",
+      "description": "Endpoints de autenticación"
+    },
+    {
+      "name": "Reservas",
+      "description": "Endpoints de gestión de reservas"
+    },
+    {
+      "name": "Facturas",
+      "description": "Endpoints de gestión de facturas"
+    },
+    {
+      "name": "Huéspedes",
+      "description": "Endpoints de gestión de huéspedes"
+    },
+    {
+      "name": "Recepcionista",
+      "description": "Endpoints específicos para recepcionistas"
+    },
+    {
+      "name": "Supervisor",
+      "description": "Endpoints específicos para supervisores"
+    }
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Autenticación"],
+        "summary": "Iniciar sesión",
+        "parameters": [
+          {
+            "name": "credentials",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string",
+                  "format": "password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login exitoso"
+          }
+        }
+      }
+    },
+    "/reservas": {
+      "post": {
+        "tags": ["Reservas"],
+        "summary": "Crear nueva reserva",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reserva",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "HabitacionId": {
+                  "type": "integer"
+                },
+                "HuespedId": {
+                  "type": "integer"
+                },
+                "fechaEntrada": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "fechaSalida": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Reserva creada exitosamente"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Reservas"],
+        "summary": "Obtener todas las reservas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de reservas"
+          }
+        }
+      }
+    },
+    "/reservas/{id}": {
+      "get": {
+        "tags": ["Reservas"],
+        "summary": "Obtener reserva por ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalles de la reserva"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Reservas"],
+        "summary": "Actualizar reserva",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "reserva",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fechaEntrada": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "fechaSalida": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "estado": {
+                  "type": "string",
+                  "enum": ["pendiente", "confirmada", "cancelada"]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva actualizada exitosamente"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reservas"],
+        "summary": "Eliminar reserva",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva eliminada exitosamente"
+          }
+        }
+      }
+    },
+    "/reservas/{reservaId}/check-out": {
+      "post": {
+        "tags": ["Reservas"],
+        "summary": "Realizar check-out",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservaId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check-out realizado exitosamente"
+          }
+        }
+      }
+    },
+    "/facturas": {
+      "get": {
+        "tags": ["Facturas"],
+        "summary": "Obtener todas las facturas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de facturas"
+          }
+        }
+      }
+    },
+    "/facturas/huesped/{huespedId}": {
+      "get": {
+        "tags": ["Facturas"],
+        "summary": "Obtener facturas por huésped",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "huespedId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Facturas del huésped"
+          }
+        }
+      }
+    },
+    "/facturas/{facturaId}/anular": {
+      "put": {
+        "tags": ["Facturas"],
+        "summary": "Anular factura",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "facturaId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Factura anulada exitosamente"
+          }
+        }
+      }
+    },
+    "/huespedes": {
+      "post": {
+        "tags": ["Huéspedes"],
+        "summary": "Registrar nuevo huésped",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "huesped",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "type": "string"
+                },
+                "apellido": {
+                  "type": "string"
+                },
+                "documento": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "telefono": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Huésped registrado exitosamente"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Huéspedes"],
+        "summary": "Obtener todos los huéspedes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de huéspedes"
+          }
+        }
+      }
+    },
+    "/recepcionista/dashboard": {
+      "get": {
+        "tags": ["Recepcionista"],
+        "summary": "Obtener dashboard del recepcionista",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos del dashboard"
+          }
+        }
+      }
+    },
+    "/recepcionista/check-in/{reservaId}": {
+      "patch": {
+        "tags": ["Recepcionista"],
+        "summary": "Realizar check-in",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reservaId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check-in realizado exitosamente"
+          }
+        }
+      }
+    },
+    "/supervisor/dashboard": {
+      "get": {
+        "tags": ["Supervisor"],
+        "summary": "Obtener dashboard del supervisor",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos del dashboard"
+          }
+        }
+      }
+    },
+    "/supervisor/discrepancias": {
+      "get": {
+        "tags": ["Supervisor"],
+        "summary": "Detectar discrepancias",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de discrepancias encontradas"
+          }
+        }
+      }
+    }
+  }
+}
