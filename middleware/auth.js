@@ -24,15 +24,19 @@ const verificarToken = async (req, res, next) => {
   }
 };
 
-const esSupervisor = (req, res, next) => {
-  if (req.usuario.rol !== 'supervisor') {
+const soloSupervisor = (req, res, next) => {
+  const usuario = req.usuario || req.user;
+  if (!usuario) return res.status(401).json({ error: 'Usuario no autenticado' });
+  if (usuario.rol !== 'supervisor') {
     return res.status(403).json({ error: 'Acceso denegado. Se requiere rol de supervisor' });
   }
   next();
 };
 
-const esRecepcionista = (req, res, next) => {
-  if (req.usuario.rol !== 'recepcionista') {
+const soloRecepcionista = (req, res, next) => {
+  const usuario = req.usuario || req.user;
+  if (!usuario) return res.status(401).json({ error: 'Usuario no autenticado' });
+  if (usuario.rol !== 'recepcionista') {
     return res.status(403).json({ error: 'Acceso denegado. Se requiere rol de recepcionista' });
   }
   next();
@@ -40,6 +44,6 @@ const esRecepcionista = (req, res, next) => {
 
 module.exports = {
   verificarToken,
-  esSupervisor,
-  esRecepcionista
+  soloSupervisor,
+  soloRecepcionista
 }; 

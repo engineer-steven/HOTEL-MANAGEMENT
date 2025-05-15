@@ -1,26 +1,29 @@
 const { Sequelize } = require('sequelize');
+const testConfig = require('./test.config');
 
-// Configuración para pruebas con SQLite en memoria
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: ':memory:',
-  logging: false, // Desactivar logging para pruebas
-  define: {
-    timestamps: true,
-    underscored: true,
-    underscoredAll: true,
-    freezeTableName: false,
-    paranoid: false
-  }
-});
+const isTest = process.env.NODE_ENV === 'test';
+const config = isTest ? testConfig.database : {
+  dialect: 'mysql',
+  host: process.env.DB_HOST || 'localhost',
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'hotel_management',
+  logging: false
+};
 
-// Sincronizar la base de datos
-sequelize.sync({ force: true })
-  .then(() => {
+const sequelize = new Sequelize(config);
+
+const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
     console.log('Base de datos sincronizada');
-  })
-  .catch(err => {
-    console.error('Error al sincronizar la base de datos:', err);
-  });
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+  }
+};
+
+if (!isTest) {
+  testConnection();
+}
 
 module.exports = sequelize; 
